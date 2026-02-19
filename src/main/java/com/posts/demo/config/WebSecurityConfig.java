@@ -19,7 +19,7 @@ public class WebSecurityConfig {
    http
            .authorizeHttpRequests(auth-> auth.requestMatchers("/posts/**").permitAll().anyRequest().authenticated())
            .csrf(AbstractHttpConfigurer::disable)
-           .sessionManagement(sessionManagementConfig->sessionManagementConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+           .sessionManagement(sessionManagementConfig->sessionManagementConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
            //.formLogin(Customizer.withDefaults());
    return http.build();
     }
