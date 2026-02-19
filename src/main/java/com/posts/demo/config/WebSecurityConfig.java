@@ -14,7 +14,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 public class WebSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
-   http.authorizeHttpRequests(auth-> auth.anyRequest().authenticated()).formLogin(Customizer.withDefaults());
+   http.authorizeHttpRequests(auth-> auth.requestMatchers("/posts/**").permitAll().anyRequest().authenticated()).formLogin(Customizer.withDefaults());
    return http.build();
     }
 }
