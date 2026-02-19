@@ -1,6 +1,7 @@
 package com.posts.demo.advices;
 
 import com.posts.demo.config.ApiResponse;
+import com.posts.demo.exceptions.ResourceAlreadyExistsException;
 import com.posts.demo.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class GlobalExceptionHandler {
                         (existingValue,newValue)->existingValue
 
                 ));
-        ApiResponse<?> apiResponse =ApiResponse.builder().success(false).status(String.valueOf(HttpStatus.BAD_REQUEST.value())).message("validation Errors").timestamp(LocalDateTime.now()).build();
+        ApiResponse<?> apiResponse =ApiResponse.builder().success(false).status(String.valueOf(HttpStatus.BAD_REQUEST.value())).message("validation Errors").timestamp(LocalDateTime.now()).data(errors).build();
         return new ResponseEntity<>(apiResponse,HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(jakarta.validation.ConstraintViolationException.class)
@@ -78,5 +79,16 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<?>> handleResourceAlreadyExistsException(ResourceAlreadyExistsException e) {
+        ApiResponse<String> response = ApiResponse.<String>builder()
+                .success(false)
+                .status(String.valueOf(HttpStatus.CONFLICT.value()))
+                .message(e.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 }

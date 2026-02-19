@@ -1,6 +1,7 @@
 package com.posts.demo.config;
 
 
+import org.springframework.boot.security.autoconfigure.actuate.web.reactive.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -17,7 +18,9 @@ public class WebSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
    http
-           .authorizeHttpRequests(auth-> auth.requestMatchers("/posts/**").permitAll().anyRequest().authenticated())
+           .authorizeHttpRequests(auth-> auth
+                   .requestMatchers("/api/v1/auth/**","/error","/actuator/**").permitAll()
+                   .requestMatchers("/posts/**").permitAll().anyRequest().authenticated())
            .csrf(AbstractHttpConfigurer::disable)
            .sessionManagement(sessionManagementConfig->sessionManagementConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
            //.formLogin(Customizer.withDefaults());
