@@ -3,9 +3,11 @@ package com.posts.demo.advices;
 import com.posts.demo.config.ApiResponse;
 import com.posts.demo.exceptions.ResourceAlreadyExistsException;
 import com.posts.demo.exceptions.ResourceNotFoundException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -90,5 +92,16 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiResponse<?>> handleAuthenticationException(AuthenticationException e) {
+        ApiResponse<?> apiResponse=ApiResponse.builder().status(String.valueOf(HttpStatus.UNAUTHORIZED.value())).success(false).message(e.getMessage()).data(null).timestamp(LocalDateTime.now()).build();
+        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+    }
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ApiResponse<?>> handleJwtException(JwtException e) {
+        ApiResponse<?> apiResponse=ApiResponse.builder().status(String.valueOf(HttpStatus.UNAUTHORIZED.value())).success(false).message(e.getMessage()).data(null).timestamp(LocalDateTime.now()).build();
+        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
     }
 }

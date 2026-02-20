@@ -6,6 +6,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.antlr.v4.runtime.Token;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -24,7 +27,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
    }
     public String generateToken(UserEntity user){
-         long expireTimeInMilliSeconds=System.currentTimeMillis()+ (30*1000);
+         long expireTimeInMilliSeconds=System.currentTimeMillis()+ (120*1000);
         return Jwts.builder()
                 .subject(user.getId().toString())
                 .claim("email",user.getEmail())
@@ -43,4 +46,5 @@ public class JwtService {
 
         return Long.valueOf(claims.getSubject());
     }
+
 }
