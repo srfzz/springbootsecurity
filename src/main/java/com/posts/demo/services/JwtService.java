@@ -26,11 +26,21 @@ public class JwtService {
    private SecretKey getSecretKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
    }
-    public String generateToken(UserEntity user){
-         long expireTimeInMilliSeconds=System.currentTimeMillis()+ (120*1000);
+    public String generateAccessToken(UserEntity user){
+         long expireTimeInMilliSeconds=System.currentTimeMillis()+ (60*1000*10);
         return Jwts.builder()
                 .subject(user.getId().toString())
                 .claim("email",user.getEmail())
+                .issuedAt(new Date())
+                .expiration(new Date(expireTimeInMilliSeconds))
+                .signWith(getSecretKey())
+                .compact();
+
+    }
+    public String generateRefreshToken(UserEntity user){
+        long expireTimeInMilliSeconds=System.currentTimeMillis()+ (1000L * 60 * 60 * 24 * 30);
+        return Jwts.builder()
+                .subject(user.getId().toString())
                 .issuedAt(new Date())
                 .expiration(new Date(expireTimeInMilliSeconds))
                 .signWith(getSecretKey())
