@@ -14,11 +14,13 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final UserService userService;
+    private final SessionService sessionService;
 
-    public AuthService(@Lazy AuthenticationManager authenticationManager, JwtService jwtService, UserService userService) {
+    public AuthService(@Lazy AuthenticationManager authenticationManager, JwtService jwtService, UserService userService, SessionService sessionService) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.userService = userService;
+        this.sessionService = sessionService;
     }
 
     public LoginResponseDto userSignIn(LoginDto userLoginDto) {
@@ -29,11 +31,13 @@ public class AuthService {
         assert userEntity != null;
         String jwtAccessToken=jwtService.generateAccessToken(userEntity);
         String jwtRefreshToken=jwtService.generateRefreshToken(userEntity);
+  sessionService.generateNewSession(userEntity,jwtRefreshToken);
         return new LoginResponseDto(userEntity.getId(),jwtAccessToken,jwtRefreshToken,userEntity.getName());
     }
 
     public LoginResponseDto refreshToken(String refreshToken) {
        Long userId = jwtService.getUserIdFromToken(refreshToken);
+       sessionService.validateSession(refreshToken);
        UserEntity user=userService.gerUserById(userId);
         String jwtAccessToken=jwtService.generateAccessToken(user);
         return new LoginResponseDto(user.getId(),jwtAccessToken,refreshToken,user.getName());

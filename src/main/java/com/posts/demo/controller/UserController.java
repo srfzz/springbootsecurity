@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @RestController
-@RequestMapping(path="/api/v1/auth/")
+@RequestMapping(path="/api/v1/auth")
 public class UserController {
     private final UserService userService;
     private final AuthService authService;

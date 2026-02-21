@@ -50,4 +50,7 @@ public class UserEntity implements UserDetails {
     public String getUsername() {
     return this.email;
     }
+
+    @OneToMany(mappedBy ="user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   private List<SessionEntity> sessions;
 }
