@@ -29,7 +29,7 @@ public class UserEntity implements UserDetails {
     @Email
     @Column(nullable = false,unique = true)
     private String email;
-    @Column(nullable = false)
+    @Column(nullable = true)
     @Pattern(
             regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
             message = "Password must contain at least one digit, one lowercase, one uppercase, and one special character"

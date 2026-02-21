@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+
+### Sensitive Config Files ###
+application.properties
+application.yml
+config/*.yml
+config/*.properties
