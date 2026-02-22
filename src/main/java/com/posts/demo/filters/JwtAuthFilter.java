@@ -43,7 +43,7 @@ private final JwtService jwtService;
           Long userId = jwtService.getUserIdFromToken(token);
           if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
               UserEntity user = userService.gerUserById(userId);
-              UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, null);
+              UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
               authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
               SecurityContextHolder.getContext().setAuthentication(authentication);
 

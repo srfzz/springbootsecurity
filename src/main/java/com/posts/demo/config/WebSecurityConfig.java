@@ -20,6 +20,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
+import static com.posts.demo.entities.enums.Role.ADMIN;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -36,7 +38,7 @@ public class WebSecurityConfig {
    http
            .authorizeHttpRequests(auth-> auth
                    .requestMatchers("/api/v1/auth/**","/error","/actuator/**","/home.html").permitAll()
-                   .requestMatchers("/posts/**").permitAll().anyRequest().authenticated())
+                   .requestMatchers("/posts/**").hasRole(ADMIN.name()).anyRequest().authenticated())
 //           .exceptionHandling(exceptions -> exceptions
 //                   .authenticationEntryPoint((request, response, authException) -> {
 //                       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");

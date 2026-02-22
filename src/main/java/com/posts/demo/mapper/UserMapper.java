@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
     public UserDto toDto(UserEntity userEntity)
     {
-    return  UserDto.builder().id(userEntity.getId()).name(userEntity.getName()).email(userEntity.getEmail()).build();
+    return  UserDto.builder().id(userEntity.getId()).name(userEntity.getName()).email(userEntity.getEmail()).roles(userEntity.getRoles()).permissions(userEntity.getPermissions()).build();
     }
     public UserEntity toEntity(UserDto userDto)
     {
-        return UserEntity.builder().name(userDto.name()).email(userDto.email()).password(userDto.password()).build();
+        return UserEntity.builder().name(userDto.name()).email(userDto.email()).password(userDto.password()).roles(userDto.roles()).permissions(userDto.permissions()).build();
     }
 }

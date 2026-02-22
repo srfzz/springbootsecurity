@@ -1,15 +1,20 @@
 package com.posts.demo.entities;
 
+import com.posts.demo.entities.enums.Permissions;
+import com.posts.demo.entities.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="users")
@@ -36,9 +41,23 @@ public class UserEntity implements UserDetails {
     )
     private String password;
 
+    @Enumerated(EnumType.STRING)
+   @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Role> roles;
+
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Permissions> permissions;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        Set<SimpleGrantedAuthority> authorities =  roles.stream().map(r -> new SimpleGrantedAuthority("ROLE_"+r.name())).collect(Collectors.toSet());
+    permissions.forEach(
+            permissions1 ->  authorities.add(new SimpleGrantedAuthority(permissions1.name()))
+    );
+
+    return authorities;
     }
 
 

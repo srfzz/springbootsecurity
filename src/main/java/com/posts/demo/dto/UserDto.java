@@ -1,8 +1,11 @@
 package com.posts.demo.dto;
 
-import jakarta.persistence.Column;
+import com.posts.demo.entities.enums.Permissions;
+import com.posts.demo.entities.enums.Role;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
+
+import java.util.Set;
 
 @Builder
 public record UserDto(
@@ -22,6 +25,8 @@ public record UserDto(
                regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
                message = "Password must contain at least one digit, one lowercase, one uppercase, and one special character"
        )
-        String password
+        String password,
+       Set<Role> roles,
+       Set<Permissions> permissions
 ) {
 }
