@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -26,7 +28,7 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<ApiResponse<?>> getAllPosts() {
        List<PostDto> postDto=postService.getAllPosts();
        ApiResponse<Object> response=ApiResponse.builder().success(true).status(String.valueOf(HttpStatus.OK.value())).data(postDto).timestamp(LocalDateTime.now()).message("Successful").build();
@@ -34,7 +36,7 @@ public class PostController {
     }
 
     @PostMapping("/posts")
-
+   @PreAuthorize("hasAuthority('POST_CREATE')")
     public ResponseEntity<ApiResponse<?>> addPost(@Valid @RequestBody PostDto postRequestDto) {
         PostDto postDto=postService.addPost(postRequestDto);
         ApiResponse<?> apiResponse=ApiResponse.builder().success(true).message("successful").status(String.valueOf(HttpStatus.CREATED.value())).data(postDto).timestamp(LocalDateTime.now()).build();

@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,6 +25,7 @@ import static com.posts.demo.entities.enums.Role.ADMIN;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true,prePostEnabled = true)
 public class WebSecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final OAuth2SuccessHandler  oAuth2SuccessHandler;
@@ -38,7 +40,7 @@ public class WebSecurityConfig {
    http
            .authorizeHttpRequests(auth-> auth
                    .requestMatchers("/api/v1/auth/**","/error","/actuator/**","/home.html").permitAll()
-                   .requestMatchers("/posts/**").hasAnyAuthority("POST_VIEW","POST_CREATE").anyRequest().authenticated())
+                   .requestMatchers("/posts/**").authenticated())
 //           .exceptionHandling(exceptions -> exceptions
 //                   .authenticationEntryPoint((request, response, authException) -> {
 //                       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
