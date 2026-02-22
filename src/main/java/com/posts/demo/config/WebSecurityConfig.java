@@ -38,7 +38,7 @@ public class WebSecurityConfig {
    http
            .authorizeHttpRequests(auth-> auth
                    .requestMatchers("/api/v1/auth/**","/error","/actuator/**","/home.html").permitAll()
-                   .requestMatchers("/posts/**").hasRole(ADMIN.name()).anyRequest().authenticated())
+                   .requestMatchers("/posts/**").hasAnyAuthority("POST_VIEW","POST_CREATE").anyRequest().authenticated())
 //           .exceptionHandling(exceptions -> exceptions
 //                   .authenticationEntryPoint((request, response, authException) -> {
 //                       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
